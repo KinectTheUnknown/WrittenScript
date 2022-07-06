@@ -1,0 +1,133 @@
+WrittenScript {
+  Program = (Statement  (eol | &"EOF"))* "EOF"? end
+  
+
+  Statement = ~UnnamedFunctionExp (AssignmentDeclareStatement
+  	| IfStatement
+    | WhileStatement
+    | DoWhileStatement
+    | SwitchStatement
+    | BlockStatement
+    | Expression
+  )
+  
+  AssignmentDeclareStatement (Variables that are declared, but not initialized) = ~"SET" varType #space AssignmentDeclareTargetExp ~"TO"
+  // For reusablility in assignment with initalizer
+  AssignmentDeclareTargetExp = variableName
+  
+  BlockStatement = DoBlockStatement #space "END"
+  
+  SwitchStatement = "SWITCH" #space Expression #space SwitchBody "END"
+  SwitchBody = "DO" #space (SwitchBlocksFirst #space (eol #space)? (SwitchBlocks #space (eol #space)?)*)?
+  SwitchBlocksFirst = CaseBlock | "DEFAULT" | "BREAK"
+  SwitchBlocks = SwitchBlocksFirst | Statement
+  CaseBlock = "CASE" #space Expression
+  
+  
+  DoBlock<body> = "DO" (#space body (#space eol)?)*
+  DoBlockStatement = DoBlock<FunctionBody>
+  
+  DoWhileStatement = DoBlockStatement #space While #space "END"
+  
+  IfStatement = If ElseIf* Else? #space "END"
+  //IfStatement = If ElseIf* Else? "END"
+  If = "IF" #space Expression #space DoBlockStatement
+  ElseIf = "ELSE" #space If
+  Else = "ELSE" #space DoBlockStatement
+  
+  WhileStatement =  While BlockStatement
+  While = "WHILE" #space Expression
+  
+  
+  Expression = WrappedExpression
+  | UnnamedFunctionExp
+  | AssignmentExp
+  | PropertyAccessExp
+  | BinaryOpExp
+  | FunctionCall
+  | UrnaryOpExp
+  | Literal
+  | variableName
+  
+  
+  WrappedExpression = "OP" #space Expression #space "CP"
+  
+  PropertyAccessExp = AccessibleExp #space "OF" #space variableName
+  AccessibleExp = ~UnnamedFunctionExp Expression
+  
+  sep =  "SEP" space ~sep
+  commaSep = sep
+  SpacedExpression = Expression #space
+  FunctionCall = CallableExp #space "CALL" #space Separated<Expression, commaSep> "END"
+  //CallableExp = WrappedExpression | AssignmentExp | BinaryOpExp | FunctionCall | PropertyAccessExp | variableName
+  CallableExp = Expression
+  
+  AssignmentExp = varType #space AssignmentTargetExp "TO" Expression
+  AssignmentTargetExp (Expressions that can be assigned) = AssignmentDeclareTargetExp
+  varType = "VAR" | "LET" | "CONST" | "SET"
+  
+  BinaryOpExp = Expression #space binaryOp #space Expression
+  binaryOp = arithmeticOp | comparisonOp | equalityOp | logicalOp
+  arithmeticOp = "ADD" | "SUB" | "MUL" | "DIV" | "MOD" | "POW"
+  comparisonOp = ("G" | "L") "T" "E"?
+  equalityOp = "N"? "S"? "EQ"
+  logicalOp = "L" ("AND" | "OR")
+  
+  UrnaryOpExp = urnaryOp #space Expression
+  urnaryOp = "POS" | "NEG" | "LNOT" | "TYPEOF"
+  
+  
+  Literal = Object | Array | Number | string | boolean | Function
+  
+  Array = "ARR" #space Separated<Expression, commaSep> "END"
+  
+  boolean = "TRUE" | "FALSE"
+  
+  // While function is usually a statement on the top-level, it can also be used as an expression
+  Function = FunctionExp | UnnamedFunctionExp | ArrowFunctionSingleExp | ArrowFunctionMultiExp
+  FunctionExp = "FN" #space variableName FunctionExpRest
+  UnnamedFunctionExp = "UFN" #space FunctionExpRest
+  ArrowFunctionSingleExp = ArrowFunctionStart "DO" #space Expression #space "END"
+  ArrowFunctionMultiExp = ArrowFunctionStart BlockStatement
+  
+  FunctionExpRest = variableName* BlockStatement
+  ArrowFunctionStart = "AFN" #space variableName*
+  
+  Number = BigInt | Float | Integer
+  Integer = tDigit+
+  BigInt = "BIG" #space Integer
+  Float = Integer? "DOT" Integer
+  
+  Object = "OBJ" #space (ObjectProp | ObjectMet)* "END"
+  ObjectProp = "PROP" #space propName #space "TO" #space Expression
+  ObjectMet = "FN" #space propName FunctionExpRest
+  propName = ~reserved (letter | digit)+
+  
+  string = "STR" space (~(space "END") any)* space "END"
+  
+  
+  eol = end | "EOL" | "\n"
+  FunctionBody = ReturnStatement | Statement
+  ReturnStatement = "RETURN" #space Expression?
+  Separated<expression, separator> = (expression #space separator)* (expression #space (separator #space)?)?
+  variableName = ~reserved ((letter | digit)+)
+  
+  tDigits = ("ZERO" | "ONE" | "TWO" | "THREE" | "FOUR" | "FIVE" | "SIX" | "SEVEN" | "EIGHT" | "NINE")
+  tDigit = tDigits ~tDigits
+  reserved = "AFN"
+    | "BIG"
+    | "CASE" | "CALL" | "CP"
+    | "DEFAULT" | "DO"
+    | "ELSE" | "END" | "EOL" | "EOF" | "ESC"
+    | "FN"
+    | "IF"
+    | "OBJ" | "OF" | "OP"
+    | "PROP"
+    | "RETURN"
+    | "STR" | "SWITCH"
+    | "UFN"
+    | "WHILE"
+    | binaryOp | boolean
+    | tDigits
+    | varType
+}
