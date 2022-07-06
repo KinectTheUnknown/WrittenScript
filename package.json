@@ -1,5 +1,5 @@
 {
-  "name": "WrittenScript",
+  "name": "written_script",
   "version": "1.0.0",
   "description": "An interpreted programming language that only uses words",
   "main": "index.js",
@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ohm-js": "^0.14.0"
+    "ohm-js": "^16.3.4"
   },
   "devDependancies": {
-    "ava": "^3.12.1"
+    "ava": "^4.3.0"
   }
 }
