@@ -21,14 +21,14 @@ test("Object: Methods", shouldParseAs,
 `OBJ 
   FN foo bar baz DO
     foo SEQ STR number END
-    SET baz TO foo ADD bar
-    RETURN true
+    baz TO foo ADD bar
+    RETURN TRUE
   END
 END`,
 `{
 foo(bar, baz) {
 foo === "number"
- baz = foo + bar
+baz = foo + bar
 return true
 }
 }`)
