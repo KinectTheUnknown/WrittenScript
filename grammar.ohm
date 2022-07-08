@@ -134,7 +134,7 @@ WrittenScript {
     | tDigits
     | varType
     | es6Reserved
-}
+
 es6Reserved = "arguments" | "await"
   | "break"
   | "case" | "catch" | "class" | "const" | "continue"
@@ -151,3 +151,4 @@ es6Reserved = "arguments" | "await"
   | "var" | "void"
   | "while" | "with"
   | "yield"
+}
