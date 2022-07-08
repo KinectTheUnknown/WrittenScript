@@ -2,7 +2,8 @@ WrittenScript {
   Program = (Statement  (eol | &"EOF"))* "EOF"? end
   
 
-  Statement = ~UnnamedFunctionExp (AssignmentDeclareStatement
+  Statement = ~UnnamedFunctionExp (AssignmentStatement
+    | AssignmentDeclareStatement
   	| IfStatement
     | WhileStatement
     | DoWhileStatement
@@ -11,6 +12,8 @@ WrittenScript {
     | Expression
   )
   
+  AssignmentStatement = varType #space AssignmentExp
+  varType = "VAR" | "LET" | "CONST" | "SET"
   AssignmentDeclareStatement (Variables that are declared, but not initialized) = ~"SET" varType #space AssignmentDeclareTargetExp ~"TO"
   // For reusablility in assignment with initalizer
   AssignmentDeclareTargetExp = variableName
@@ -62,9 +65,8 @@ WrittenScript {
   //CallableExp = WrappedExpression | AssignmentExp | BinaryOpExp | FunctionCall | PropertyAccessExp | variableName
   CallableExp = Expression
   
-  AssignmentExp = varType #space AssignmentTargetExp "TO" Expression
+  AssignmentExp = AssignmentTargetExp "TO" Expression
   AssignmentTargetExp (Expressions that can be assigned) = AssignmentDeclareTargetExp
-  varType = "VAR" | "LET" | "CONST" | "SET"
   
   BinaryOpExp = Expression #space binaryOp #space Expression
   binaryOp = arithmeticOp | comparisonOp | equalityOp | logicalOp
@@ -125,6 +127,7 @@ WrittenScript {
     | "PROP"
     | "RETURN"
     | "STR" | "SWITCH"
+    | "TO"
     | "UFN"
     | "WHILE"
     | binaryOp | boolean

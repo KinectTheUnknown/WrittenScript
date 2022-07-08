@@ -37,6 +37,12 @@ semantics.addOperation("eval", {
   },
 
   // Statement
+  AssignmentStatement(type, _, rest) {
+    const t = type.eval();
+    const r = rest.eval();
+
+    return `${t} ${r}`;
+  },
   AssignmentDeclareStatement(type, _, target) {
     const t = type.eval();
     const name = target.eval();
@@ -107,8 +113,11 @@ semantics.addOperation("eval", {
   },
 
   // Expression
-  AssignmentExp(type, _, name, __, exp) {
-    return `${type.eval() + " " || ""}${name.eval()} = ${exp.eval()}`
+  AssignmentExp(name, _, exp) {
+    const n = name.eval();
+    const e = exp.eval();
+
+    return `${n} = ${e}`
   },
   AssignmentTargetExp(exp) {
     return exp.eval();
