@@ -113,7 +113,7 @@ semantics.addOperation("eval", {
   },
 
   // Expression
-  AssignmentExp(name, _, exp) {
+  AssignmentExp(name, _, __, exp) {
     const n = name.eval();
     const e = exp.eval();
 

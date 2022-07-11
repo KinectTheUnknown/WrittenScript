@@ -65,7 +65,7 @@ WrittenScript {
   //CallableExp = WrappedExpression | AssignmentExp | BinaryOpExp | FunctionCall | PropertyAccessExp | variableName
   CallableExp = Expression
   
-  AssignmentExp = AssignmentTargetExp "TO" Expression
+  AssignmentExp = AssignmentTargetExp "TO" #space Expression
   AssignmentTargetExp (Expressions that can be assigned) = AssignmentDeclareTargetExp
   
   BinaryOpExp = Expression #space binaryOp #space Expression
