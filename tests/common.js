@@ -1,13 +1,20 @@
 const { match, parseMatch } = require("../");
 
-/** @type {{ macros: Record<string, (t: import("ava").ExecutionContext, ...args: any) => void> }} macros */
 module.exports = {
   macros: {
-    shouldParseAs(t, str, expected, startingRule) {
+    shouldParse(t, str, startingRule) {
       const m = match(str, startingRule);
-      if (!t.true(m.succeeded(), `Expected "${str}" to parse, but it failed`)) {
-        return;
-      };
+      
+      const r = t.true(m.succeeded(), `Expected "${str}" to parse, but it failed`)
+
+      return {result: r, match: m}
+    },
+    shouldParseAs(t, str, expected, startingRule) {
+      const {shouldParse} = module.exports.macros
+      const {result, match: m} = shouldParse(t, str, startingRule)
+
+      if (!result) return;
+      
       const actual = parseMatch(m);
       t.true(actual === expected, `Should parse "${str}" as "${expected}", but got "${actual}"`)
     },
