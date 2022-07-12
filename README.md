@@ -159,7 +159,7 @@ Do-While Loop
 `DO ...exp WHILE exp END`
 
 ## Function Call
-`<Function> CALL (param1...( param2)) END`
+`<Expression> CALL (param1...( param2)) END`
 
 ## Terminators
 
@@ -190,9 +190,17 @@ Loops
   - for...in loop
   - for...of loop
 
+Flow control:
+  - label
+  - break
+  - continue
+
 Functions:
   - async
+  - generator
 
 Urnary operators:
   - await
 
+Miscellaneous
+  - Automatic EOL insertion
