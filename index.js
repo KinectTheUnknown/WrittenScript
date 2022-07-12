@@ -49,12 +49,12 @@ semantics.addOperation("eval", {
     return `${t} ${name}`;
   },
   BlockStatement(doStatement, _, __) {
-    const body = doStatement.eval();
-
-    return `{\n${body}\n}`;
+    return doStatement.eval();
   },
   DoBlock(_, __, expressions, ___, ____) {
-    return expressions.children.map(expression => expression.eval()).join("\n") 
+    const body = expressions.children.map(expression => expression.eval()).join("\n")
+
+    return `{\n${body}\n}`;
   },
   /*DoBlockStatement(_, __, expressions, ___, ____) {
     return expressions.children.map(expression => expression.eval()).join("\n") 
@@ -76,13 +76,13 @@ semantics.addOperation("eval", {
     return res
   },
   If(_, __, condition, ___, body) {
-    return `if (${condition.eval()}) {\n${body.eval()}\n}`
+    return `if (${condition.eval()}) ${body.eval()}`
   },
   ElseIf(_, __, ifStmt) {
     return `else ${ifStmt.eval()}`
   },
   Else(_, __, body) {
-    return `else {\n${body.eval()}\n}`
+    return `else ${body.eval()}`
   },
   SwitchStatement(_ ,__, item, ___, body, ____) {
     return `switch (${item.eval()}) ${body.eval()}`;
