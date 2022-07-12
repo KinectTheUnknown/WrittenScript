@@ -38,15 +38,15 @@ semantics.addOperation("eval", {
 
   // Statement
   AssignmentStatement(type, _, rest) {
-    const t = type.eval();
+    const t = type.numChildren !== 0 ? type.eval() + " " : "";
     const r = rest.eval();
 
-    return `${t} ${r}`;
+    return `${t}${r}`;
   },
   AssignmentDeclareStatement(type, _, target) {
-    const t = type.eval();
+    const t = type.numChildren !== 0 ? type.eval() + " " : "";
     const name = target.eval();
-    return `${t} ${name}`;
+    return `${t}${name}`;
   },
   BlockStatement(doStatement, _, __) {
     return doStatement.eval();

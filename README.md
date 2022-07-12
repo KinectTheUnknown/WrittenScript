@@ -54,10 +54,10 @@ Object
 
 ### Assignment
 Variable Declarator (`VarDeclarator`)
-`[SET|VAR|LET|CONST]`
+`VAR|LET|CONST`
 
 Assignment
-`<VarDeclarator> name TO expression`
+`(<VarDeclarator> )name TO expression`
 
 ### Arithmetic
 Add

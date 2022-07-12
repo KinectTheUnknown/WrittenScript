@@ -18,22 +18,22 @@ END`,
 }`)
 test("IF: Completely filled", shouldParseAs, 
 `IF num SEQ ZERO DO
-  SET str TO STR foo END
+  str TO STR foo END
 ELSE IF num SEQ ONE DO
-  SET str TO STR bar END
+  str TO STR bar END
 ELSE IF num SEQ TWO DO
-  SET str TO STR baz END
+  str TO STR baz END
 ELSE DO
-  SET str TO STR qux END
+  str TO STR qux END
 END`,
 `if (num === 0) {
- str = "foo"
+str = "foo"
 } else if (num === 1) {
- str = "bar"
+str = "bar"
 } else if (num === 2) {
- str = "baz"
+str = "baz"
 } else {
- str = "qux"
+str = "qux"
 }`)
 
 test("If: Invalid - Spaces", spacingTest, "IF TRUE DO ELSE IF TRUE DO ELSE IF TRUE ELSE DO END")

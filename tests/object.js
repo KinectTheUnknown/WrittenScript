@@ -37,7 +37,7 @@ test("Object: Mix", shouldParseAs,
 `OBJ PROP foo TO STR bar END
   PROP 160 TO THREE DOT ONE FOUR
   FN num sum DO
-    SET sum TO sum LOR ZERO
+    sum TO sum LOR ZERO
     IF num SEQ ZERO DO
       RETURN sum
     ELSE DO
@@ -49,7 +49,7 @@ END`,
 foo: "bar",
 160: 3.14,
 num(sum) {
- sum = sum || 0
+sum = sum || 0
 if (num === 0) {
 return sum
 } else {

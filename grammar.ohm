@@ -12,9 +12,9 @@ WrittenScript {
     | Expression
   )
   
-  AssignmentStatement = varType #space AssignmentExp
-  varType = "VAR" | "LET" | "CONST" | "SET"
-  AssignmentDeclareStatement (Variables that are declared, but not initialized) = ~"SET" varType #space AssignmentDeclareTargetExp ~"TO"
+  AssignmentStatement = (varType #space)? AssignmentExp
+  varType = "VAR" | "LET" | "CONST"
+  AssignmentDeclareStatement (Variables that are declared, but not initialized) = varType #space AssignmentDeclareTargetExp ~"TO"
   // For reusablility in assignment with initalizer
   AssignmentDeclareTargetExp = variableName
   
