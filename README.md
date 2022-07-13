@@ -8,7 +8,7 @@ WrittenScript is a programming language that only uses letters and words. The at
 `TRUE|FALSE`
 
 ### String
-`STR( [...content]) END`
+`STR (...content )END`
 
 ### Number
 Digits
@@ -27,11 +27,11 @@ Float
 `<Integer> DOT <Number>`
 
 ### Functions
-Function Expression
-`FN name ...(params, )DO ...((RETURN )? expression) END`
+Function Expression `FunctionExp`
+`FN name ...(params )DO ...((RETURN )? expression )END`
 
 Unnamed Function Expression
-`UFN ...(params )DO ...((RETURN ) expression) END` 
+`UFN ...(params )DO ...((RETURN ) expression )END` 
 
 Single-line Arrow Function
 `AFN ...(params )DO expression END`
@@ -44,8 +44,16 @@ Array
 `ARR ...(expression SEP )END`
 
 Object
-`OBJ ...(PROP name TO expression|METHOD name ...param DO (...expression)) END`
+`OBJ ...([PROP name TO expression|<FunctionExp>|<Getter>|<Setter>] )END`
 
+Getter
+`GET name DO ...((RETURN )expression )END`
+
+Setter
+`SET name param DO ...((RETURN )expression )END`
+
+Class
+`CLASS name DO ...([(STATIC )<FunctionExp>|<Getter>|<Setter>] )END`
 
 ## Operators
 
@@ -103,63 +111,69 @@ Shift Right Unsigned
 ### Logical
 #### Equality
 
+Negate
+`LNOT a`
+
 Loose
-`exp EQ exp`
+`a EQ b`
 
 Strict
-`exp SEQ exp`
+`a SEQ b`
 
 #### Unequality
 Loose
-`exp NEQ exp`
+`a NEQ a`
 
 Strict
-`exp NSEQ exp`
+`a NSEQ b`
 
 #### Compararison
 
 And
-`exp LAND exp`
+`a LAND b`
 
 Or
-`exp LOR exp`
+`a LOR b`
 
 Greater Than
-`exp GT exp`
+`a GT b`
 
 ...or Equal to
-`exp GTE exp`
+`a GTE b`
 
 Less Than
-`exp LT exp`
+`a LT b`
 
 ...or Equal to
-`exp LTE exp`
+`a LTE b`
 
 ## Statements
 
 ### Conditional
 If
-`IF exp THEN ...exp...( ELSE IF exp THEN ...exp)(ELSE ...exp) END`
+`IF condition THEN ...(statement )...(ELSE IF condition THEN ...statement)(ELSE ...statement)END`
 
 Switch
-`SWITCH exp...( (CASE exp|DEFAULT)|exp) END`
+`SWITCH exp...(((CASE exp|DEFAULT)|statement) )END`
 
 ### Loop
 For Loop
-`FOR exp exp exp DO ...exp END`
+`FOR initialLoopExp condition endIterationExp DO ...statement END`
 
 For...of Loop
-`FOR <VarDeclarator> name OF iterable DO ...exp END`
+`FOR <VarDeclarator> name OF iterable DO ...statement END`
+
+For...in Loop
+`FOR <VarDeclarator> name IN iterable DO ...statement END`
 
 While Loop
-`WHILE exp DO ...exp END`
+`WHILE condition DO ...statement END`
 
 Do-While Loop
-`DO ...exp WHILE exp END`
+`DO ...statement WHILE condition END`
 
 ## Function Call
-`<Expression> CALL (param1...( param2)) END`
+`exp CALL (param1 ...(paramN ))END`
 
 ## Terminators
 
