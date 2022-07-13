@@ -30,7 +30,14 @@ for (const d of decl) {
   test(`Assignment: Invalid - Spacing ${d.trim() || "SET"}`, spacingTest, `CONST ${d}foo TO ONE`)
 }
 
+for (const d of decl) {
+  if (d === "") continue;
+  test(`Assignment: Declare - ${d.trim() || "SET"}`, shouldParseAs, `${d}foo`, `${d.toLowerCase()}foo`)
+  test(`Assignment: Declare Invalid - Spacing ${d.trim() || "SET"}`, spacingTest, `${d}foo`)
+}
+
 test(`Assignment: Chained`, shouldParseAs, `CONST foo TO bar TO ONE`, `const foo = bar = 1`)
+test(`Assignment: Chained Invalid - Spacing`, spacingTest, `CONST foo TO bar TO ONE`)
 
 for (const [i, kw] of keywords.entries()) {
   test(`Assignment: Invalid - Keyword ${i}-1` , shouldNotParse, `CONST ${kw} TO ONE`)
