@@ -1,9 +1,14 @@
 const ohm = require("ohm-js")
 const fs = require("fs");
-const data = fs.readFileSync("./grammar.ohm", "utf8");
-const grammar = ohm.grammar(data)
 
-const semantics = grammar.createSemantics()
+const writtenScriptSource = fs.readFileSync("./grammar.ohm", "utf8");
+const writtenScriptGrammar = ohm.grammar(writtenScriptSource)
+
+const jsES6Source = fs.readFileSync("./jsES6Grammar.ohm", "utf8");
+const jsES6Grammar = ohm.grammar(jsES6Source, { WrittenScript: writtenScriptGrammar });
+
+
+const semantics = jsES6Grammar.createSemantics();
 const digits = ["ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"]
 const varDeclarations = {
   SET: "",
@@ -312,7 +317,7 @@ semantics.addOperation("eval", {
  * @return {ohm.MatchResult}
  */
 function match(str, startingRule) {
-  return grammar.match(str, startingRule);
+  return jsES6Grammar.match(str, startingRule);
 }
 /**
  * @param {string} str
@@ -334,7 +339,8 @@ function parseMatch(match) {
   return semantics(match).eval()
 }
 module.exports = {
-  grammar,
+  grammar: writtenScriptGrammar,
+  jsES6WrittenScriptGrammar: jsES6Grammar,
   semantics,
   match,
   parse,
