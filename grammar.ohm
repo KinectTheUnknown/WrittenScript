@@ -112,7 +112,7 @@ WrittenScript {
   FunctionBody = ReturnStatement | Statement
   ReturnStatement = "RETURN" #space Expression?
   Separated<expression, separator> = (expression #space separator)* (expression #space (separator #space)?)?
-  variableName = ~reserved ((letter | digit)+)
+  variableName = ~reserved ((letter | digit | "_" | "$")+)
   
   tDigits = ("ZERO" | "ONE" | "TWO" | "THREE" | "FOUR" | "FIVE" | "SIX" | "SEVEN" | "EIGHT" | "NINE")
   tDigit = tDigits ~tDigits
