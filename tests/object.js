@@ -33,9 +33,23 @@ return true
 }
 }`)
 
+test("Object: Virtuals", shouldParseAs,
+`OBJ
+  SET foo value DO _foo TO value END
+  GET foo DO RETURN _foo END
+END`,
+`{
+set foo(value) {
+_foo = value
+},
+get foo() {
+return _foo
+}
+}`)
+
 test("Object: Mix", shouldParseAs,
 `OBJ PROP foo TO STR bar END
-  PROP 160 TO THREE DOT ONE FOUR
+  PROP baz TO THREE DOT ONE FOUR
   FN num sum DO
     sum TO sum LOR ZERO
     IF num SEQ ZERO DO
@@ -44,10 +58,12 @@ test("Object: Mix", shouldParseAs,
       RETURN sum ADD num
     END
   END
+  SET foo value DO _foo TO value END
+  GET foo DO RETURN _foo END
 END`,
 `{
 foo: "bar",
-160: 3.14,
+baz: 3.14,
 num(sum) {
 sum = sum || 0
 if (num === 0) {
@@ -55,5 +71,11 @@ return sum
 } else {
 return sum + num
 }
+},
+set foo(value) {
+_foo = value
+},
+get foo() {
+return _foo
 }
 }`)

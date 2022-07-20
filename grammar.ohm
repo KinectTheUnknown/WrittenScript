@@ -100,9 +100,12 @@ WrittenScript {
   BigInt = "BIG" #space Integer
   Float = Integer? "DOT" Integer
   
-  Object = "OBJ" #space (ObjectProp | ObjectMet)* "END"
+  Object = "OBJ" #space ObjectBody* "END"
+  ObjectBody = ObjectProp | ObjectMet | Getter | Setter
   ObjectProp = "PROP" #space propName #space "TO" #space Expression
   ObjectMet = "FN" #space propName FunctionExpRest
+  Getter = "GET" #space propName #space DoBlockStatement #space "END"
+  Setter = "SET" #space propName #space variableName #space DoBlockStatement #space "END"
   propName = ~reserved (letter | digit)+
   
   string = "STR" space (~(space "END") any)* space "END"

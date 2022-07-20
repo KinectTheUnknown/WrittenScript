@@ -246,6 +246,19 @@ semantics.addOperation("eval", {
 
     return `${n}${r}`;
   },
+  Getter(_, __, name, ___, body, ____, _____) {
+    const n = name.eval();
+    const b = body.eval();
+
+    return `get ${n}() ${b}`;
+  },
+  Setter(_, __, name, ___, param, ____, body, _____, ______) {
+    const n = name.eval();
+    const p = param.eval();
+    const b = body.eval();
+
+    return `set ${n}(${p}) ${b}`;
+  },
   propName(chars) {
     return chars.eval().join("");
   },
