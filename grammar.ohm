@@ -126,7 +126,7 @@ WrittenScript {
     | "OBJ" | "OF" | "OP"
     | "PROP"
     | "RETURN"
-    | "STR" | "SWITCH"
+    | "SET" | "STR" | "SWITCH"
     | "TO"
     | "UFN"
     | "WHILE"

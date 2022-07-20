@@ -11,7 +11,6 @@ const jsES6Grammar = ohm.grammar(jsES6Source, { WrittenScript: writtenScriptGram
 const semantics = jsES6Grammar.createSemantics();
 const digits = ["ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"]
 const varDeclarations = {
-  SET: "",
   VAR: "var",
   LET: "let",
   CONST: "const"
