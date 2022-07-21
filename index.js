@@ -263,7 +263,7 @@ semantics.addOperation("eval", {
     return chars.eval().join("");
   },
   string(_, __, str, ___, ____) {
-    return '"' + str.children.map(c => c.eval()).join(``).replace(/[\\"]/g, "\\$0") + '"'
+    return '"' + str.eval().join(``).replace(/[\\"]/g, "\\$0") + '"'
   },
   ReturnStatement(_, __, exp) {
     return `return ${exp.eval()}`
