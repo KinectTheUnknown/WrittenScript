@@ -60,7 +60,6 @@ WrittenScript {
   
   sep =  "SEP" space ~sep
   commaSep = sep
-  SpacedExpression = Expression #space
   FunctionCall = CallableExp #space "CALL" #space Separated<Expression, commaSep> "END"
   //CallableExp = WrappedExpression | AssignmentExp | BinaryOpExp | FunctionCall | PropertyAccessExp | variableName
   CallableExp = Expression

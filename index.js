@@ -268,9 +268,6 @@ semantics.addOperation("eval", {
   ReturnStatement(_, __, exp) {
     return `return ${exp.eval()}`
   },
-  SpacedExpression(exp, _) {
-    return exp.eval();
-  },
   variableName(name) {
     return name.eval().join(``)
   },
