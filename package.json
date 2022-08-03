@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ohm-js": "^16.3.4"
+    "ohm-js": "^16.4.0"
   },
   "devDependencies": {
     "ava": "^4.3.0",
