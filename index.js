@@ -56,7 +56,7 @@ semantics.addOperation("eval", {
     return doStatement.eval();
   },
   DoBlock(_, __, expressions, ___, ____) {
-    const body = expressions.children.map(expression => expression.eval()).join("\n")
+    const body = expressions.eval().join("\n")
 
     return `{\n${body}\n}`;
   },
@@ -135,19 +135,19 @@ semantics.addOperation("eval", {
   arithmeticOp(op) {
     return arithmeticOps[op.sourceString]
   },
-  comparisonOp(size,  _, equal) {
+  comparisonOp_(size,  _, equal) {
     const s = {G: ">", L: "<"}[size.sourceString];
     const eq = equal.numChildren !== 0 ? "=" : "";
 
     return s + eq
   },
-  equalityOp(negate, strict, _) {
+  equalityOp_(negate, strict, _) {
     const n = negate.numChildren !== 0 ? "!" : "=";
     const s = strict.numChildren !== 0 ? "=" : "";
 
     return `${n}${s}=`;
   },
-  logicalOp(_, operator) {
+  logicalOp_(_, operator) {
     return logicalOps[operator.sourceString]
   },
   FunctionCall(exp, _, __, ___, params, _____) {
@@ -237,10 +237,10 @@ semantics.addOperation("eval", {
   Object(_, __, props, ___) {
     return `{\n${props.eval().join(",\n")}\n}`
   },
-  ObjectProp(_, __, key, ___, ____, _____, value) {
+  Property(_, __, key, ___, ____, _____, value) {
     return `${key.eval()}: ${value.eval()}`;
   },
-  ObjectMet(_, __, name, rest) {
+  Method(_, __, name, rest) {
     const n = name.eval();
     const r = rest.eval();
 
