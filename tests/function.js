@@ -1,5 +1,5 @@
 const test = require("ava").default
-const {macros: {shouldParseAs, spacingTest}} = require("./common.js");
+const {macros: {shouldParseAs}} = require("./common.js");
 
 const params = ["bar", "baz", "bax", "qux", "quuz"]
 /** @type {Map<string, [string, string]>} */
@@ -33,10 +33,3 @@ for (const [prefixTitle, [prefix, expectedPrefix, startingRule]] of prefixes.ent
 test("Arrow Function: Empty", shouldParseAs, `AFN DO END`, `() => {\n\n}`);
 test("Arrow Function Single", shouldParseAs, `AFN DO ONE  END`, `() => 1`);
 test("Arrow Function Single - 2", shouldParseAs, `AFN DO ONE ADD ONE END`, `() => 1 + 1`);
-
-
-test("Function: Invalid - Spaces", spacingTest, "FN foo DO END")
-test("Unnamed Function: Invalid - Spaces", spacingTest, "UFN DO END", "Function")
-
-test("Arrow Function Single: Invalid - Spaces", spacingTest, "AFN DO ONE END")
-test("Arrow Function Multi: Invalid - Spaces", spacingTest, "AFN DO ONE EOL TWO END")

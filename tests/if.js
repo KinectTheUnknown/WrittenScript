@@ -1,5 +1,5 @@
 const test = require("ava").default
-const {macros: {shouldParseAs, shouldNotParse, spacingTest}} = require("./common.js");
+const {macros: {shouldParseAs, shouldNotParse}} = require("./common.js");
 
 test("If: Noop", shouldParseAs,
 `IF TRUE DO
@@ -35,5 +35,3 @@ str = "baz"
 } else {
 str = "qux"
 }`)
-
-test("If: Invalid - Spaces", spacingTest, "IF TRUE DO ELSE IF TRUE DO ELSE IF TRUE ELSE DO END")

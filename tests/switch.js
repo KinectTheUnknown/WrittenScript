@@ -1,5 +1,5 @@
 const test = require("ava").default
-const {macros: {shouldParseAs: shouldParseAs, spacingTest}} = require("./common.js");
+const {macros: {shouldParseAs: shouldParseAs}} = require("./common.js");
 
 test("Switch: empty", shouldParseAs, "SWITCH TRUE DO END", "switch (true) {\n\n}")
 /** @type {[string, string, string, string][]} */
@@ -24,8 +24,6 @@ ${cases.map(c => `${c[0]}\n${c[1]}`).join("\n")}
 END`,
 `switch (true) {
 ${cases.map(c => `${c[2]}\n${c[3]}`).join("\n")}
-}`
-)
+}`)
   }
 }
-test("Switch: Invalid - spaces", spacingTest, `SWITCH TRUE DO CASE ONE EOL ONE CASE TWO EOL TWO CASE THREE EOL THREE DEFAULT ZERO END`)

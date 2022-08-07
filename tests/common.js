@@ -24,16 +24,5 @@ module.exports = {
 
       t.true(m.failed(), `Expected "${str}" to not parse, but got ${parsed}`);
     },
-    spacingTest(t, str, startingRule) {
-      const {shouldNotParse} = module.exports.macros;
-      const spaces = str.matchAll(/ +/g);
-      for (const match of spaces) {
-        const index = match.index
-        const subStr = str.slice(0, index) + str.slice(index + 1);
-        shouldNotParse(t, subStr, startingRule);
-      }
-
-      shouldNotParse(t, str.replaceAll(/ /g, ""), startingRule);
-    }
   } 
 }
