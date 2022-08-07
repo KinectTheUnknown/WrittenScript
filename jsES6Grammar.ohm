@@ -1,5 +1,6 @@
-JSES6WrittenScript <: WrittenScript {
-  reserved := ... | es6Reserved
+JSReserved <: WrittenScript {
+  reserved := ... | kw<es6Reserved>
+  Expression := ... | kw<"this">
   es6Reserved = "arguments" | "await"
     | "break"
     | "case" | "catch" | "class" | "const" | "continue"
@@ -12,9 +13,8 @@ JSES6WrittenScript <: WrittenScript {
     | "package" | "private" | "protected" | "public"
     | "return"
     | "static" | "super" | "switch"
-    | "this"| "throw" | "true" | "try" | "typeof"
+    | "this" | "throw" | "true" | "try" | "typeof"
     | "var" | "void"
     | "while" | "with"
     | "yield"
-    | digit
 }

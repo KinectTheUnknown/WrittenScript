@@ -1,5 +1,5 @@
 WrittenScript {
-  Program = (Statement  (eol | &"EOF"))* "EOF"? end
+  Program = (Statement  (eol | &kwEOF))* kwEOF? end
   
 
   Statement = ~UnnamedFunctionExp (AssignmentStatement
@@ -13,33 +13,32 @@ WrittenScript {
   )
   
   AssignmentStatement = (varType #space)? AssignmentExp
-  varType = "VAR" | "LET" | "CONST"
-  AssignmentDeclareStatement (Variables that are declared, but not initialized) = varType #space AssignmentDeclareTargetExp ~"TO"
+  varType = kw<"VAR"> | kw<"LET"> | kw<"CONST">
+  AssignmentDeclareStatement (Uninitialized variable) = varType #space AssignmentDeclareTargetExp ~kwTO
   // For reusablility in assignment with initalizer
   AssignmentDeclareTargetExp = variableName
   
-  BlockStatement = DoBlockStatement #space "END"
+  BlockStatement = DoBlockStatement #space kwEND
   
-  SwitchStatement = "SWITCH" #space Expression #space SwitchBody "END"
-  SwitchBody = "DO" #space (SwitchBlocksFirst #space (eol #space)? (SwitchBlocks #space (eol #space)?)*)?
-  SwitchBlocksFirst = CaseBlock | "DEFAULT" | "BREAK"
+  SwitchStatement = kwSWITCH #space Expression #space SwitchBody kwEND
+  SwitchBody = kwDO #space (SwitchBlocksFirst #space (eol #space)? (SwitchBlocks #space (eol #space)?)*)?
+  SwitchBlocksFirst = CaseBlock | kwDEFAULT | kwBREAK
   SwitchBlocks = SwitchBlocksFirst | Statement
-  CaseBlock = "CASE" #space Expression
+  CaseBlock = kwCASE #space Expression
   
   
-  DoBlock<body> = "DO" (#space body (#space eol)?)*
+  DoBlock<body> = kwDO (#space body (#space eol)?)*
   DoBlockStatement = DoBlock<FunctionBody>
   
-  DoWhileStatement = DoBlockStatement #space While #space "END"
+  DoWhileStatement = DoBlockStatement #space While #space kwEND
   
-  IfStatement = If ElseIf* Else? #space "END"
-  //IfStatement = If ElseIf* Else? "END"
-  If = "IF" #space Expression #space DoBlockStatement
-  ElseIf = "ELSE" #space If
-  Else = "ELSE" #space DoBlockStatement
+  IfStatement = If ElseIf* Else? #space kwEND
+  If = kwIF #space Expression #space DoBlockStatement
+  ElseIf = kwELSE #space If
+  Else = kwELSE #space DoBlockStatement
   
   WhileStatement =  While BlockStatement
-  While = "WHILE" #space Expression
+  While = kwWHILE #space Expression
   
   
   Expression = WrappedExpression
@@ -53,14 +52,14 @@ WrittenScript {
   | variableName
   
   
-  WrappedExpression = "OP" #space Expression #space "CP"
+  WrappedExpression = kwOP #space Expression #space kwCP
   
-  PropertyAccessExp = AccessibleExp #space "OF" #space variableName
+  PropertyAccessExp = AccessibleExp #space kwOF #space variableName
   AccessibleExp = ~UnnamedFunctionExp Expression
   
   sep =  "SEP" space ~sep
   commaSep = sep
-  FunctionCall = CallableExp #space "CALL" #space Separated<Expression, commaSep> "END"
+  FunctionCall = CallableExp #space kwCALL #space Separated<Expression, commaSep> kwEND
   //CallableExp = WrappedExpression | AssignmentExp | BinaryOpExp | FunctionCall | PropertyAccessExp | variableName
   CallableExp = Expression
   
@@ -69,71 +68,127 @@ WrittenScript {
   
   BinaryOpExp = Expression #space binaryOp #space Expression
   binaryOp = arithmeticOp | comparisonOp | equalityOp | logicalOp
-  arithmeticOp = "ADD" | "SUB" | "MUL" | "DIV" | "MOD" | "POW"
-  comparisonOp = ("G" | "L") "T" "E"?
-  equalityOp = "N"? "S"? "EQ"
-  logicalOp = "L" ("AND" | "OR")
+  arithmeticOp = kw<"ADD"> | kw<"SUB"> | kw<"MUL"> | kw<"DIV"> | kw<"MOD"> | kw<"POW">
+  comparisonOp = kw<comparisonOp_>
+  comparisonOp_ = ("G" | "L") "T" "E"?
+  equalityOp = kw<equalityOp_>
+  equalityOp_ = "N"? "S"? "EQ"
+  logicalOp = kw<logicalOp_>
+  logicalOp_ = "L" ("AND" | "OR")
   
   UrnaryOpExp = urnaryOp #space Expression
-  urnaryOp = "POS" | "NEG" | "LNOT" | "TYPEOF"
+  urnaryOp = kw<"POS"> | kw<"NEG"> | kw<"LNOT"> | kw<"TYPEOF">
   
   
   Literal = Object | Array | Number | string | boolean | Function
   
-  Array = "ARR" #space Separated<Expression, commaSep> "END"
+  Array = kwARR #space Separated<Expression, commaSep> kwEND
   
-  boolean = "TRUE" | "FALSE"
+  boolean = kw<"TRUE"> | kw<"FALSE">
   
   // While function is usually a statement on the top-level, it can also be used as an expression
   Function = FunctionExp | UnnamedFunctionExp | ArrowFunctionSingleExp | ArrowFunctionMultiExp
-  FunctionExp = "FN" #space variableName FunctionExpRest
-  UnnamedFunctionExp = "UFN" #space FunctionExpRest
-  ArrowFunctionSingleExp = ArrowFunctionStart "DO" #space Expression #space "END"
+  FunctionExp = kwFN #space variableName FunctionExpRest
+  UnnamedFunctionExp = kwUFN #space FunctionExpRest
+  ArrowFunctionSingleExp = ArrowFunctionStart kwDO #space Expression #space kwEND
   ArrowFunctionMultiExp = ArrowFunctionStart BlockStatement
   
   FunctionExpRest = variableName* BlockStatement
-  ArrowFunctionStart = "AFN" #space variableName*
+  ArrowFunctionStart = kwAFN #space variableName*
   
   Number = BigInt | Float | Integer
   Integer = tDigit+
-  BigInt = "BIG" #space Integer
-  Float = Integer? "DOT" Integer
+  BigInt = kwBIG #space Integer
+  Float = Integer? kwDOT Integer
   
-  Object = "OBJ" #space ObjectBody* "END"
-  ObjectBody = ObjectProp | ObjectMet | Getter | Setter
-  ObjectProp = "PROP" #space propName #space "TO" #space Expression
-  ObjectMet = "FN" #space propName FunctionExpRest
-  Getter = "GET" #space propName #space DoBlockStatement #space "END"
-  Setter = "SET" #space propName #space variableName #space DoBlockStatement #space "END"
+  Object = kwOBJ #space ObjectBody* kwEND
+  ObjectBody = ObjectProp | ObjectMet | ObjectGetter | ObjectSetter
+  ObjectProp = Property
+  ObjectMet = Method
+  ObjectGetter = Getter
+  ObjectSetter = Setter
+  Property = kwPROP #space propName #space kwTO #space Expression
+  Method = kwFN #space propName FunctionExpRest
+  Getter = kwGET #space propName #space DoBlockStatement #space kwEND
+  Setter = kwSET #space propName #space variableName #space DoBlockStatement #space kwEND
   propName = ~reserved (letter | digit)+
   
-  string = "STR" space (~(space "END") any)* space "END"
+  string = kwSTR space (~(space kwEND) any)* space kwEND
   
   
-  eol = end | "EOL" | "\n"
+  eol = end | kwEOL | "\n"
   FunctionBody = ReturnStatement | Statement
   ReturnStatement = "RETURN" #space Expression?
   Separated<expression, separator> = (expression #space separator)* (expression #space (separator #space)?)?
-  variableName = ~reserved ((letter | digit | "_" | "$")+)
+  variableName = ~reserved variableNameChar+
+  variableNameChar = letter | digit | "_" | "$"
   
-  tDigits = ("ZERO" | "ONE" | "TWO" | "THREE" | "FOUR" | "FIVE" | "SIX" | "SEVEN" | "EIGHT" | "NINE")
-  tDigit = tDigits ~tDigits
-  reserved = "AFN"
-    | "BIG"
-    | "CASE" | "CALL" | "CP"
-    | "DEFAULT" | "DO"
-    | "ELSE" | "END" | "EOL" | "EOF" | "ESC"
-    | "FN" | "FOR"
-    | "GET"
-    | "IF" | "IN"
-    | "OBJ" | "OF" | "OP"
-    | "PROP"
-    | "RETURN"
-    | "SET" | "STR" | "SWITCH"
-    | "TO"
-    | "UFN"
-    | "WHILE"
+  tDigits = kw<"ZERO">
+    | kw<"ONE">
+    | kw<"TWO">
+    | kw<"THREE">
+    | kw<"FOUR">
+    | kw<"FIVE">
+    | kw<"SIX">
+    | kw<"SEVEN">
+    | kw<"EIGHT">
+    | kw<"NINE">
+  
+  tDigit = tDigits
+  
+  
+  reserved = kwAFN | kwARR
+    | kwBIG
+    | kwCASE | kwCALL | kwCLASS | kwCP
+    | kwDEFAULT | kwDO | kwDOT
+    | kwELSE | kwEND | kwEOL | kwEOF | kwESC | kwEXT
+    | kwFN | kwFOR
+    | kwGET
+    | kwIF | kwIN
+    | kwOBJ | kwOF | kwOP
+    | kwPROP | kwPRIVATE
+    | kwRETURN
+    | kwSET | kwSTR | kwSWITCH
+    | kwTO
+    | kwUFN
+    | kwWHILE
     | binaryOp | boolean
     | tDigits
     | varType
+    
+  kw<w> = w ~(letter | digit)
+  kwAFN = kw<"AFN">
+  kwARR = kw<"ARR">
+  kwBIG = kw<"BIG">
+  kwBREAK = kw<"BREAK">
+  kwCASE = kw<"CASE">
+  kwCALL = kw<"CALL">
+  kwCLASS = kw<"CLASS">
+  kwCP = kw<"CP">
+  kwDEFAULT = kw<"DEFAULT">
+  kwDO = kw<"DO">
+  kwDOT = kw<"DOT">
+  kwELSE = kw<"ELSE">
+  kwEND = kw<"END">
+  kwEOL = kw<"EOL">
+  kwEOF = kw<"EOF">
+  kwESC = kw<"ESC">
+  kwEXT = kw<"EXT">
+  kwFN = kw<"FN">
+  kwFOR = kw<"FOR">
+  kwGET = kw<"GET">
+  kwIF = kw<"IF">
+  kwIN = kw<"IN">
+  kwOBJ = kw<"OBJ">
+  kwOF = kw<"OF">
+  kwOP = kw<"OP">
+  kwPROP = kw<"PROP">
+  kwPRIVATE = kw<"PRIVATE">
+  kwRETURN = kw<"RETURN">
+  kwSET = kw<"SET">
+  kwSTR = kw<"STR">
+  kwSWITCH = kw<"SWITCH">
+  kwTO = kw<"TO">
+  kwUFN = kw<"UFN">
+  kwWHILE = kw<"WHILE">
 }
